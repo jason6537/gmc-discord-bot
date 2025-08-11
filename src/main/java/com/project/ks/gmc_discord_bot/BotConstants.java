@@ -18,4 +18,9 @@ public interface BotConstants {
      * Curse Words
      */
     public static final List<String> curseWords = List.of("nmsl", "cnm", "sb", "傻逼", "去尼玛", "操你妈", "出生", "屁股", "tm", "炸裂");
+
+    /**
+     * Blacklist User
+     */
+    public static final List<String> backlist = List.of("464378895962210305","385424342428811265","754345471211995208","833334498241282060");
 }

@@ -71,6 +71,20 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
+
+		<!-- Spring Transaction -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>7.0.0-M4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.revenuemonster</groupId>
+			<artifactId>RevenueMonsterOpenAPI</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
