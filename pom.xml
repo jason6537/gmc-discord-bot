@@ -79,10 +79,11 @@
 			<version>7.0.0-M4</version>
 		</dependency>
 
+		<!-- Valorant Wrapper -->
 		<dependency>
-			<groupId>com.github.revenuemonster</groupId>
-			<artifactId>RevenueMonsterOpenAPI</artifactId>
-			<version>1.0.2</version>
+			<groupId>io.github.socketc0nnection</groupId>
+			<artifactId>jva</artifactId>
+			<version>1.2</version>
 		</dependency>
 
 	</dependencies>

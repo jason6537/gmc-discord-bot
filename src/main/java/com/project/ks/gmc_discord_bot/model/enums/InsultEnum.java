@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum InsultEnum {
 
-    MELON("","","");
+    MELON("dogshit","123","");
 
     private String containsString;
 
