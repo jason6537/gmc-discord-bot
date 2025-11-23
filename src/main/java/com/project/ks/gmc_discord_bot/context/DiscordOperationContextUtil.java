@@ -4,10 +4,14 @@ import java.util.Date;
 
 public class DiscordOperationContextUtil {
 
-    public static final ThreadLocal<Date> executionTime = new ThreadLocal<>();
+    private static final ThreadLocal<Date> executionTime = new ThreadLocal<>();
 
     public static void initThreadLocal(){
         executionTime.set(new Date());
+    }
+
+    public static Date getExecutionTime(){
+        return executionTime.get();
     }
 
     public static void clearContext(){

@@ -24,7 +24,7 @@ public class PingProcessorImpl implements CommandProcessor {
 
         LOGGER.info("Ping Action Received From {}", event.getAuthor().getName());
 
-        Date startTime = DiscordOperationContextUtil.executionTime.get();
+        Date startTime = DiscordOperationContextUtil.getExecutionTime();
         Date endTime = new Date();
         long diff = endTime.getTime() - startTime.getTime();
 

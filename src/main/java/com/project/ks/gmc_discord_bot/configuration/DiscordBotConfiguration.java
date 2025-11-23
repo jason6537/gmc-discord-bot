@@ -19,12 +19,6 @@ public class DiscordBotConfiguration {
     @Value("${discord.api.token}")
     private String TOKEN;
 
-    /**
-     * PostgresDB Password
-     */
-    @Value("${db.postgres.password}")
-    private String dbPassword;
-
     @Bean
     public JDA initBot(@Autowired ListenerAdapter eventListenerHandler){
         return JDABuilder
