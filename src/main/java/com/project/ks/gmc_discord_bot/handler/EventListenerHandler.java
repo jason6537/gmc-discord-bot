@@ -1,12 +1,16 @@
 package com.project.ks.gmc_discord_bot.handler;
 
 import com.project.ks.gmc_discord_bot.BotConstants;
+import com.project.ks.gmc_discord_bot.audioService.AudioService;
+import com.project.ks.gmc_discord_bot.audioService.AudioTrackListener;
 import com.project.ks.gmc_discord_bot.facade.MessageCommandHandler;
 import com.project.ks.gmc_discord_bot.processor.impl.ValorantStoreFrontService;
 import com.project.ks.gmc_discord_bot.template.ServiceCallback;
 import com.project.ks.gmc_discord_bot.template.ServiceTemplate;
 import lombok.Setter;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -15,8 +19,10 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -28,7 +34,6 @@ public class EventListenerHandler extends ListenerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventListenerHandler.class);
 
     private static final List<String> curseWords = new ArrayList<>();
-
 
     private static final List<String> whiteListCurseWordList = new ArrayList<>();
 
@@ -44,6 +49,9 @@ public class EventListenerHandler extends ListenerAdapter {
     @Autowired
     private ValorantStoreFrontService valorantStoreFrontService;
 
+    @Autowired
+    private AudioService audioService;
+
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
 
@@ -51,7 +59,7 @@ public class EventListenerHandler extends ListenerAdapter {
                 event,
                 new ServiceCallback<MessageReceivedEvent>() {
                     @Override
-                    public void handleEvent(MessageReceivedEvent event) {
+                    public void handleEvent(MessageReceivedEvent event) throws IOException {
                         LOGGER.info("Message Received ! : Content : {}", event.getMessage().getContentRaw());
 
                         String authorId = event.getAuthor().getId();
@@ -96,6 +104,37 @@ public class EventListenerHandler extends ListenerAdapter {
                                     .getChannel()
                                     .sendMessage(mention + ", 你是我的小绵羊!\n By yxy");
                             messageCreateAction.queue();
+                        }
+
+                        if(event.getMessage().getContentRaw().contains("chengdutest")){
+
+                            if(event.getMessage().getAuthor().getId().equals("604674402591834153")){
+                                String mention = "<@" + event.getMessage().getAuthor().getId()+ ">";
+                                MessageCreateAction messageCreateAction = event.getMessage()
+                                        .getChannel()
+                                        .sendMessage(mention + "你还是算了吧。。。");
+                                messageCreateAction.queue();
+                                return;
+                            }
+
+                            String userId = "754345471211995208";
+                            String channelId = "1354432520275497030";
+                            VoiceChannel targetChannel = event.getGuild()
+                                    .getVoiceChannelById(channelId);
+
+                            List<Member> members = event.getMessage().getMentions().getMembers();
+
+                            members
+                                .forEach(e -> {
+                                    event.getGuild().moveVoiceMember(e, targetChannel).queue(
+                                            success -> System.out.println("yes"),
+                                            error -> System.out.println("failed")
+                                    );
+                                });
+
+
+                            String path = new ClassPathResource("audio/gay.mp3").getFile().getPath();
+                            audioService.playMp3(event.getGuild(), targetChannel, path, new AudioTrackListener(event.getGuild()));
                         }
 
                         //If Not Bot Command Do Nothing
