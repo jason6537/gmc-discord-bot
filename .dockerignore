@@ -1,0 +1,79 @@
+# Version control
+.git/
+.gitignore
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Java build output
+/target/
+*.class
+
+# Other build outputs
+build/
+dist/
+out/
+
+# Test and debug artifacts
+test/
+tests/
+debug/
+*.log
+*.hprof
+
+# Environment and secrets
+.env*
+*.env
+*.pem
+*.key
+*.crt
+config.local.*
+*.local.yml
+
+# Documentation
+*.md
+README*
+HELP.md
+
+# Temporary and local files
+tmp/
+temp/
+*.tmp
+.local/
+local/
+
+# Project-specific
+assets/
+
+# Ignore audio files not needed in build
+*.mp3
+
+# Miscellaneous
+*.cmd
+
+# Exclude Docker-related files (if present)
+Dockerfile*
+docker-compose*
+
+# Exclude SVN and Mercurial
+.svn/
+.hg/
+
+# Exclude Go, Node, Python (not detected, but for completeness)
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+node_modules/
+npm-debug.log
+yarn-debug.log
+/vendor/
+*.test
+.go-cache/
+
+# Exclude documentation directory if present
+docs/

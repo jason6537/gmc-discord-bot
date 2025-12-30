@@ -1,0 +1,18 @@
+services:
+  java-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: java-app
+    restart: unless-stopped
+    init: true
+    environment:
+      - DISCORD_API_TOKEN=${API_TOKEN}
+
+
+    # env_file: ./.env  # Uncomment if .env file exists
+    # No ports exposed: none found in Dockerfile or documentation
+    # No external dependencies detected in project files or documentation
+    # If your app needs to connect to external services (e.g., databases), add them below and configure networking/depends_on as needed
+# No volumes section included, as no persistent data services detected
+# No networks section included, as only a single service is present and no inter-service communication is required
