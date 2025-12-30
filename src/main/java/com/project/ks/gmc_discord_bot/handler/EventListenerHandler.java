@@ -133,8 +133,7 @@ public class EventListenerHandler extends ListenerAdapter {
                                 });
 
 
-                            String path = new ClassPathResource("audio/gay.mp3").getFile().getPath();
-                            audioService.playMp3(event.getGuild(), targetChannel, path, new AudioTrackListener(event.getGuild()));
+                            audioService.playMp3(event.getGuild(), targetChannel, "audio/gay.mp3", new AudioTrackListener(event.getGuild()));
                         }
 
                         //If Not Bot Command Do Nothing

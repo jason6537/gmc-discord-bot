@@ -8,7 +8,15 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 @Service
 public class AudioService {
@@ -21,7 +29,10 @@ public class AudioService {
         this.sendHandler = sendHandler;
     }
 
-    public void playMp3(Guild guild, VoiceChannel channel, String filePath, AudioTrackListener listener) {
+    public void playMp3(Guild guild, VoiceChannel channel, String classpathMp3, AudioTrackListener listener) throws IOException {
+
+        // 1️⃣ Copy MP3 from classpath → temp file
+        File tempMp3 = copyClasspathToTempFile(classpathMp3);
 
         AudioPlayer player = playerManager.createPlayer();
         sendHandler.setPlayer(player);
@@ -30,7 +41,7 @@ public class AudioService {
         guild.getAudioManager().setSendingHandler(sendHandler);
         guild.getAudioManager().openAudioConnection(channel);
 
-        playerManager.loadItem(filePath, new AudioLoadResultHandler() {
+        playerManager.loadItem(tempMp3.getAbsolutePath(), new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 player.playTrack(track);
@@ -43,7 +54,7 @@ public class AudioService {
 
             @Override
             public void noMatches() {
-                System.out.println("No matches found for: " + filePath);
+                System.out.println("No matches found for: " + tempMp3.getAbsolutePath());
             }
 
             @Override
@@ -51,5 +62,22 @@ public class AudioService {
                 exception.printStackTrace();
             }
         });
+    }
+
+    private File copyClasspathToTempFile(String classpathMp3) throws IOException {
+        ClassPathResource resource = new ClassPathResource(classpathMp3);
+
+        if (!resource.exists()) {
+            throw new FileNotFoundException("Classpath MP3 not found: " + classpathMp3);
+        }
+
+        File tempFile = File.createTempFile("lava-audio-", ".mp3");
+        tempFile.deleteOnExit();
+
+        try (InputStream is = resource.getInputStream()) {
+            Files.copy(is, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        return tempFile;
     }
 }
