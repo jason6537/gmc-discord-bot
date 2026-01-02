@@ -60,6 +60,7 @@ public class EventListenerHandler extends ListenerAdapter {
                 new ServiceCallback<MessageReceivedEvent>() {
                     @Override
                     public void handleEvent(MessageReceivedEvent event) throws IOException {
+                        LOGGER.info(String.valueOf(event.getResponseNumber()));
                         LOGGER.info("Message Received ! : Content : {}", event.getMessage().getContentRaw());
 
                         String authorId = event.getAuthor().getId();

@@ -11,6 +11,12 @@ COPY --link .mvn .mvn/
 # Make sure mvnw is executable and download dependencies (cacheable)
 RUN chmod +x mvnw && ./mvnw dependency:go-offline
 
+# Download OpenTelemetry agent
+RUN curl -L -o /app/opentelemetry-javaagent.jar \
+    https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar && \
+    ls -lh /app/opentelemetry-javaagent.jar && \
+    echo "Agent downloaded successfully"
+
 # Copy source code
 COPY --link src ./src/
 
@@ -28,8 +34,11 @@ USER appuser
 # Copy built jar from build stage
 COPY --link --from=build /app/target/*.jar /app/app.jar
 
+# Java Agent
+COPY --link --from=build /app/opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar
+
 # JVM container flags for memory/resource management
 ENV JAVA_OPTS="-XX:MaxRAMPercentage=80.0"
 
 # Use exec form for proper signal handling
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=80.0", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-javaagent:/app/opentelemetry-javaagent.jar", "-XX:MaxRAMPercentage=80.0", "-jar", "/app/app.jar"]
