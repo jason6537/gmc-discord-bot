@@ -35,7 +35,7 @@ public class ChengDuMemeProcessorImpl implements CommandProcessor {
             event.getGuild().moveVoiceMember(e, targetChannel).queue();
         });
 
-        audioService.playMp3(event.getGuild(), targetChannel, "audio/gay.mp3", new AudioTrackListener(event.getGuild()));
+        //audioService.playMp3(event.getGuild(), targetChannel, "audio/gay.mp3", new AudioTrackListener(event.getGuild()));
     }
 
     @Override
