@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class MessageCommandHandlerImpl implements MessageCommandHandler{
     private Map<String, CommandProcessor> processorMap;
 
     @Override
-    public void handleMessage(MessageReceivedEvent messageReceivedEvent) {
+    public void handleMessage(MessageReceivedEvent messageReceivedEvent) throws IOException {
         Message message = messageReceivedEvent.getMessage();
         List<String> args = parseArguments(message.getContentRaw());
 

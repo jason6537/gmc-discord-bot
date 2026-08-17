@@ -17,7 +17,6 @@ public class ServiceTemplate {
         DiscordOperationContextUtil.initThreadLocal();
 
         try {
-
             //Event Triggered on The Discord Handler
             LOGGER.info("Event toggled on the discord handler");
 

@@ -15,4 +15,9 @@ public class KickProcessorImpl implements CommandProcessor {
         Guild guild = event.getGuild();
         guild.kick(author);
     }
+
+    @Override
+    public boolean needProcess(MessageReceivedEvent event) {
+        return false;
+    }
 }

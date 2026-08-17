@@ -32,4 +32,9 @@ public class PingProcessorImpl implements CommandProcessor {
         MessageCreateAction messageCreateAction = channel.sendMessage("PONG! with " + diff + "ms");
         messageCreateAction.queue();
     }
+
+    @Override
+    public boolean needProcess(MessageReceivedEvent event) {
+        return false;
+    }
 }
