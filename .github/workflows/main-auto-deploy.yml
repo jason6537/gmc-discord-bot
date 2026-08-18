@@ -1,0 +1,35 @@
+name: main-auto-deploy.yml
+
+on:
+  workflow_run:
+    workflows: ["main-auto-build-check"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run on CentOs Server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+          script: |
+            set -e
+
+            cd /home/deploy/gmc-discord-bot
+
+            export IMAGE_TAG="sha-${{ github.event.workflow_run.head_sha }}"
+
+            echo "Deploying image:"
+            echo "ghcr.io/jason6537/gmc-discord-bot:${IMAGE_TAG}"
+
+            docker compose pull
+            docker compose up -d
+
+            echo "Deployment completed."
+            docker compose ps
