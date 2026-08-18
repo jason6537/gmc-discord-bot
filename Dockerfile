@@ -1,44 +1,30 @@
-# syntax=docker/dockerfile:1
+#syntax=docker/dockerfile:1
 
 # --- Build Stage ---
-FROM eclipse-temurin:17-jdk AS build
+FROM maven:3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy Maven wrapper and config first for caching
-COPY --link pom.xml mvnw ./
-COPY --link .mvn .mvn/
+# Copy Maven project configuration
+COPY pom.xml ./
 
-# Make sure mvnw is executable and download dependencies (cacheable)
-RUN chmod +x mvnw && ./mvnw dependency:go-offline
+# Download dependencies
+RUN mvn dependency:go-offline
 
-# Download OpenTelemetry agent
-RUN curl -L -o /app/opentelemetry-javaagent.jar \
-    https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar && \
-    ls -lh /app/opentelemetry-javaagent.jar && \
-    echo "Agent downloaded successfully"
+# Copy source
+COPY src ./src/
 
-# Copy source code
-COPY --link src ./src/
-
-# Build the application (skip tests for faster CI/CD)
-RUN ./mvnw package -DskipTests
+# Build application
+RUN mvn package -DskipTests
 
 # --- Runtime Stage ---
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Create a non-root user for security
+# Create non-root user
 RUN useradd -m appuser
 USER appuser
 
-# Copy built jar from build stage
-COPY --link --from=build /app/target/*.jar /app/app.jar
+# Copy JAR
+COPY --from=build /app/target/*.jar /app/app.jar
 
-# Java Agent
-COPY --link --from=build /app/opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar
-
-# JVM container flags for memory/resource management
-ENV JAVA_OPTS="-XX:MaxRAMPercentage=80.0"
-
-# Use exec form for proper signal handling
-ENTRYPOINT ["java", "-javaagent:/app/opentelemetry-javaagent.jar", "-XX:MaxRAMPercentage=80.0", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=80.0", "-jar", "/app/app.jar"]
