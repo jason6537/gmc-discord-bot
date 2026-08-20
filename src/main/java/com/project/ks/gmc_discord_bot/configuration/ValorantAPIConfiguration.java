@@ -10,7 +10,7 @@ import java.io.IOException;
 @Configuration
 public class ValorantAPIConfiguration {
 
-    @Value("${VALORANT_API_TOKEN}")
+    @Value("${valorant.api.token}")
     private String TOKEN;
 
     @Bean
