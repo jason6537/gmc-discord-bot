@@ -6,6 +6,7 @@ import net.socketconnection.jva.models.shop.Bundle;
 import net.socketconnection.jva.models.shop.item.BundleItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -17,9 +18,11 @@ public class ValorantStoreFrontService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ValorantStoreFrontService.class);
 
+    @Autowired
+    private ValorantAPI api;
+
     public List<EmbedBuilder> invokeValorantAPI() {
         try {
-            ValorantAPI api = new ValorantAPI("HDEV-2fce41cf-ac50-46d7-adae-ae3f5e96448c");
             List<Bundle> storeBundles = api.getStoreBundles();
             BundleItem[] items = (BundleItem[]) storeBundles.get(0).getItems();
 
