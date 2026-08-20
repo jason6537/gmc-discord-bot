@@ -43,8 +43,7 @@ public class ValorantStoreFrontService {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle(item.getName());
         eb.setImage(item.getImage());
-        eb.setAuthor(item.getSkinId());
-        eb.setDescription("RP : " + item.getBasePrice());
+        eb.setFooter("RP : " + item.getBasePrice() + "\uD83D\uDCB8");
 
         return eb;
     }
