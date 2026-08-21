@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,6 +25,12 @@ public class ValorantStoreFrontService {
     public List<EmbedBuilder> invokeValorantAPI() {
         try {
             List<Bundle> storeBundles = api.getStoreBundles();
+
+            //Empty List
+            if(CollectionUtils.isEmpty(storeBundles)){
+                return Collections.emptyList();
+            }
+
             BundleItem[] items = (BundleItem[]) storeBundles.get(0).getItems();
 
             return Arrays.stream(items)
