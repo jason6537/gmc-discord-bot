@@ -39,7 +39,6 @@ public class DailyNotifyScheduler {
 
         List<EmbedBuilder> embedBuilders = valorantStoreFrontService.invokeValorantAPI();
         embedBuilders
-                .stream()
                 .forEach(
                         e -> {
                             channelById.sendMessage("").setEmbeds(e.build()).queue();
